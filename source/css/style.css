@@ -1,0 +1,16 @@
+.QPushButton, .QPlainTextEdit
+{
+    color: #343A90;
+    border: 2px solid #343A90;
+}
+
+.QComboBox
+{
+    color: #343A90;
+}
+
+.QPushButton:hover, .QPushButton:focus
+{
+    color: #FFFFFF;
+    background-color: #343A90;
+}

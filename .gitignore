@@ -125,3 +125,6 @@ dmypy.json
 
 .vscode/
 results/
+assets/
+1.txt
+2.txt

@@ -1,7 +1,7 @@
-from matplotlib.cbook import index_of
 import matplotlib.pyplot as plt
 import pandas as pd
-from matplotlib import projections, rcParams
+import numpy as np
+from matplotlib import rcParams
 from mpl_toolkits.mplot3d import Axes3D
 
 
@@ -25,12 +25,13 @@ def paint_first_plot():
     for ylabel in ylabels:
         ylabel.set_fontsize(10)
     y_of_ax.grid(True)
-    with open("results/nomenclatures_totals.txt", "w") as nomenclatures_totals:
-        sum_of_nomenclatures_positions = sum(dict_of_nomenclatures.values()) / 100
-        for _ in dict_of_nomenclatures.keys():
-            nomenclatures_totals.write(_ + " ----- "+ str(dict_of_nomenclatures[_] / sum_of_nomenclatures_positions) + "%\n")
+    fig.savefig("assets/tmp/tmp_pic.png")
+    sum_of_nomenclatures_positions = sum(dict_of_nomenclatures.values()) / 100
+    dict_of_percents = dict()
+    for _ in dict_of_nomenclatures.keys():
+        dict_of_percents[_] = str(dict_of_nomenclatures[_] / sum_of_nomenclatures_positions)
+    return dict_of_percents
         
-
 def paint_second_plot():
     dict_of_nomenclatures_percents = dict()
     list_of_values_percents = list()
@@ -45,6 +46,7 @@ def paint_second_plot():
     ax = fig.add_subplot(1, 1, 1)
     ax.set_title("Количество позиций по каждой номенклатуре в процентах")
     ax.pie(list_of_values_percents, labels = dict_of_nomenclatures_percents.keys())
+    fig.savefig("assets/tmp/tmp_pic.png")
 
 def paint_third_plot():
     dict_of_models = dict()
@@ -115,6 +117,52 @@ def paint_fifth_plot():
     ax.set_ylabel("Модель")
     ax.set_zlabel("Частная модель")
 
+def paint_sixth_plot():
+    list_of_mm_mk_count, list_of_mega, list_of_tb = list(), list(), list(), list()
+    for _ in mm_mk_count:
+        list_of_mm_mk_count.append(_)
+    for _ in tb_count:
+        list_of_tb.append(_)
+    for _ in megamart_count:
+        list_of_mega.append(_)
+    ind = np.arange(len(list_of_mm_mk_count))
+    bar_padding = np.add(list_of_mm_mk_count, list_of_mega).tolist()
+    ax = fig.add_subplot(1, 1, 1)
+    ax.bar(ind, list_of_mm_mk_count, label="ММ МК, шт.")
+    ax.bar(ind, list_of_mega, bottom=list_of_mm_mk_count, label="Мегамарт, шт.")
+    ax.bar(ind, list_of_tb, bottom=bar_padding, label="ТБ, шт.")
+    ax.legend()
+
+def paint_seventh_plot():
+    list_of_all_count, list_of_mm_mk_count, list_of_mega, list_of_tb = list(), list(), list(), list()
+    dict_of_salers_percents = dict()
+    counter = 0
+    for _ in mm_mk_count:
+        list_of_mm_mk_count.append(_)
+    for _ in tb_count:
+        list_of_tb.append(_)
+    for _ in megamart_count:
+        list_of_mega.append(_)
+    for _ in all_count:
+        list_of_all_count.append(_)
+    for _ in list_of_mm_mk_count:
+        if _ > 0:
+            counter += 1
+    dict_of_salers_percents["ММ МК, шт."] = counter / len(list_of_all_count) / 100
+    counter = 0
+    for _ in list_of_mega:
+        if _ > 0:
+            counter += 1
+    dict_of_salers_percents["Мегамарт, шт."] = counter / len(list_of_all_count) / 100
+    counter = 0
+    for _ in list_of_tb:
+        if _ > 0:
+            counter += 1
+    dict_of_salers_percents["ТБ, шт."] = counter / len(list_of_all_count) / 100
+    counter = 0
+    ax = fig.add_subplot(1, 1, 1)
+    ax.pie(dict_of_salers_percents.values(), labels = dict_of_salers_percents.keys())
+        
 
 data_file = "C:/Users/sklepikov/Desktop/ЗИП v2.xlsx"
 xl = pd.ExcelFile(data_file)
@@ -122,26 +170,10 @@ data_frame = xl.parse('Общий свод')
 nomenclature = data_frame["Номенклатура"]
 models = data_frame["Модель"]
 private_models = data_frame["Частная модель"]
+mm_mk_count = data_frame["ММ МК, шт."]
+megamart_count = data_frame["Мегамарт, шт."]
+tb_count = data_frame["ТБ, шт."]
+all_count = data_frame["Общая потребность, шт."]
 rcParams['font.family'] = 'Times New Roman'
 rcParams['font.fantasy'] = 'Times New Roman'
 fig = plt.figure()
-print("Данные по количеству позиций по каждой номенклатуре - 1")
-print("Данные по количеству позиций по каждой номенклатуре в процентах - 2")
-print("Данные по количеству позиций по каждой модели - 3")
-print("Данные по количеству позиций по каждой модели в процентах - 4")
-number_of_plot = int(input())
-if number_of_plot == 1:
-    paint_first_plot()
-    plt.show()
-elif number_of_plot == 2:
-    paint_second_plot()
-    plt.show()
-elif number_of_plot == 3:
-    paint_third_plot()
-    plt.show()
-elif number_of_plot == 4:
-    paint_fourth_plot()
-    plt.show()
-elif number_of_plot == 5:
-    paint_fifth_plot()
-    plt.show()
