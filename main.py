@@ -47,6 +47,12 @@ def paint_second_plot():
     ax.set_title("Количество позиций по каждой номенклатуре в процентах")
     ax.pie(list_of_values_percents, labels = dict_of_nomenclatures_percents.keys())
     fig.savefig("assets/tmp/tmp_pic.png")
+    dict_of_percents = dict()
+    i = 0
+    for _ in dict_of_nomenclatures_percents.keys():
+        dict_of_percents[_] = list_of_values_percents[i]
+        i += 1
+    return dict_of_percents
 
 def paint_third_plot():
     dict_of_models = dict()
@@ -68,10 +74,12 @@ def paint_third_plot():
     for ylabel in ylabels:
         ylabel.set_fontsize(10)
     y_of_ax.grid(True)
-    with open("results/models_totals.txt", "w") as nomenclatures_totals:
-        sum_of_models_positions = sum(dict_of_models.values()) / 100
-        for _ in dict_of_models.keys():
-            nomenclatures_totals.write(_ + " ----- "+ str(dict_of_models[_] / sum_of_models_positions) + "%\n")
+    fig.savefig("assets/tmp/tmp_pic.png")
+    sum_of_models_positions = sum(dict_of_models.values()) / 100
+    dict_of_percents = dict()
+    for _ in dict_of_models.keys():
+        dict_of_percents[_] = str(dict_of_models[_] / sum_of_models_positions)
+    return dict_of_percents
 
 def paint_fourth_plot():
     dict_of_models_percents = dict()
@@ -87,6 +95,13 @@ def paint_fourth_plot():
     ax = fig.add_subplot(1, 1, 1)
     ax.set_title("Количество позиций по каждой модели в процентах")
     ax.pie(list_of_values_percents, labels = dict_of_models_percents.keys())
+    fig.savefig("assets/tmp/tmp_pic.png")
+    dict_of_percents = dict()
+    i = 0
+    for _ in dict_of_models_percents.keys():
+        dict_of_percents[_] = list_of_values_percents[i]
+        i += 1
+    return dict_of_percents
 
 def paint_fifth_plot():
     dict_of_nomenclature = dict()
@@ -116,9 +131,10 @@ def paint_fifth_plot():
     ax.set_xlabel("Номенклатура")
     ax.set_ylabel("Модель")
     ax.set_zlabel("Частная модель")
+    fig.savefig("assets/tmp/tmp_pic.png")
 
 def paint_sixth_plot():
-    list_of_mm_mk_count, list_of_mega, list_of_tb = list(), list(), list(), list()
+    list_of_mm_mk_count, list_of_mega, list_of_tb = list(), list(), list()
     for _ in mm_mk_count:
         list_of_mm_mk_count.append(_)
     for _ in tb_count:
@@ -132,6 +148,7 @@ def paint_sixth_plot():
     ax.bar(ind, list_of_mega, bottom=list_of_mm_mk_count, label="Мегамарт, шт.")
     ax.bar(ind, list_of_tb, bottom=bar_padding, label="ТБ, шт.")
     ax.legend()
+    fig.savefig("assets/tmp/tmp_pic.png")
 
 def paint_seventh_plot():
     list_of_all_count, list_of_mm_mk_count, list_of_mega, list_of_tb = list(), list(), list(), list()
@@ -148,20 +165,26 @@ def paint_seventh_plot():
     for _ in list_of_mm_mk_count:
         if _ > 0:
             counter += 1
-    dict_of_salers_percents["ММ МК, шт."] = counter / len(list_of_all_count) / 100
+    dict_of_salers_percents["ММ МК, шт."] = counter / (len(list_of_all_count) / 100)
     counter = 0
     for _ in list_of_mega:
         if _ > 0:
             counter += 1
-    dict_of_salers_percents["Мегамарт, шт."] = counter / len(list_of_all_count) / 100
+    dict_of_salers_percents["Мегамарт, шт."] = counter / (len(list_of_all_count) / 100)
     counter = 0
     for _ in list_of_tb:
         if _ > 0:
             counter += 1
-    dict_of_salers_percents["ТБ, шт."] = counter / len(list_of_all_count) / 100
+    dict_of_salers_percents["ТБ, шт."] = counter / (len(list_of_all_count) / 100)
     counter = 0
+    print(dict_of_salers_percents.values())
     ax = fig.add_subplot(1, 1, 1)
     ax.pie(dict_of_salers_percents.values(), labels = dict_of_salers_percents.keys())
+    fig.savefig("assets/tmp/tmp_pic.png")
+    dict_of_percents = dict()
+    for _ in dict_of_salers_percents.keys():
+        dict_of_percents[_] = str(dict_of_salers_percents[_])
+    return dict_of_percents
         
 
 data_file = "C:/Users/sklepikov/Desktop/ЗИП v2.xlsx"

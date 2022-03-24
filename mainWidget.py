@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QComboBox, QPushButton, QTableWidget, QTableWidgetItem, QHBoxLayout, QVBoxLayout
-from PyQt5.QtGui import QPixmap
-from main import paint_first_plot, paint_second_plot
+from PyQt5.QtGui import QPixmap, QPicture
+from main import paint_first_plot, paint_second_plot, paint_third_plot, paint_fourth_plot, paint_fifth_plot, paint_sixth_plot, paint_seventh_plot
 
 
 class MainWidgetPart(QWidget):
@@ -14,9 +14,10 @@ class MainWidgetPart(QWidget):
         self.out_data = QTableWidget(self)
         self.out_data.setColumnCount(2)
         self.out_data.setRowCount(207)
+        # self.out_data.setColumnWidth(1, 500)
         label_info = QLabel("Выберите из выпадающего списка данные для представления сведений:")
         self.combo = QComboBox(self)
-        self.combo.addItems(["Количество позиций по каждой номенклатуре", "Количество позиций по каждой номенклатуре в процентах", "Количество позиций по каждой модели", "Количество позиций по каждой модели в процентах", "Распределение каждого поставщика в позициях", "Соотношение все позиции/позиции с этим поставщиком"])
+        self.combo.addItems(["Количество позиций по каждой номенклатуре", "Количество позиций по каждой номенклатуре в процентах", "Количество позиций по каждой модели", "Количество позиций по каждой модели в процентах", "", "Распределение каждого поставщика в позициях", "Соотношение все позиции/позиции с этим поставщиком"])
         button_confirm = QPushButton("Ознакомиться")
         button_confirm.clicked.connect(self.show_data)
         hbox_1 = QHBoxLayout()
@@ -41,9 +42,39 @@ class MainWidgetPart(QWidget):
             i = 0
             for _ in dict_of_percents:
                 self.out_data.setItem(i, 0, QTableWidgetItem(_))
-                self.out_data.setItem(i, 1, QTableWidgetItem(dict_of_percents[_] + "%"))
+                self.out_data.setItem(i, 1, QTableWidgetItem("%.5f" %float(dict_of_percents[_]) + "%"))
                 i += 1
         elif self.combo.currentIndex() == 1:
-            paint_second_plot()
+            dict_of_percents = paint_second_plot()
+            i = 0
+            for _ in dict_of_percents:
+                self.out_data.setItem(i, 0, QTableWidgetItem(_))
+                self.out_data.setItem(i, 1, QTableWidgetItem("%.5f" %float(dict_of_percents[_]) + "%"))
+                i += 1
+        elif self.combo.currentIndex() == 2:
+            dict_of_percents = paint_third_plot()
+            i = 0
+            for _ in dict_of_percents:
+                self.out_data.setItem(i, 0, QTableWidgetItem(_))
+                self.out_data.setItem(i, 1, QTableWidgetItem("%.5f" %float(dict_of_percents[_]) + "%"))
+                i += 1
+        elif self.combo.currentIndex() == 3:
+            dict_of_percents = paint_fourth_plot()
+            i = 0
+            for _ in dict_of_percents:
+                self.out_data.setItem(i, 0, QTableWidgetItem(_))
+                self.out_data.setItem(i, 1, QTableWidgetItem("%.5f" %float(dict_of_percents[_]) + "%"))
+                i += 1
+        elif self.combo.currentIndex() == 4:
+            paint_fifth_plot()
+        elif self.combo.currentIndex() == 5:
+            paint_sixth_plot()
+        elif self.combo.currentIndex() == 6:
+            dict_of_percents = paint_seventh_plot()
+            i = 0
+            for _ in dict_of_percents:
+                self.out_data.setItem(i, 0, QTableWidgetItem(_))
+                self.out_data.setItem(i, 1, QTableWidgetItem("%.5f" %float(dict_of_percents[_]) + "%"))
+                i += 1
         self.label_plot.setPixmap(QPixmap("assets/tmp/tmp_pic.png"))
         
